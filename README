@@ -1,0 +1,106 @@
+Monzo Tech Test
+===============
+
+Overview
+--------
+
+> Your task is to build a browser-based developer portal in JavaScript against > a dummy API that we've created!
+
+  - https://gist.github.com/eduards/cb76e275f8eec2807344081df1556902
+
+This repository contains a small client side JavaScript application that supports:
+
+ * Logging in to an external web service (with any email address and "hunter2" as the password).
+ * Fetching a list of "Apps" belonging to that user.
+ * Allowing the user to update the title of the app in place.
+ * Checking periodically that the session is still valid. If not the app will display a warning and return to the login.
+ * Logging out.
+
+Usage
+-----
+
+An example of the app can be found running on GitHub pages:
+
+    http://
+
+NOTE: This app currently uses modern JavaScript syntax and features and will likely only work in the most recent
+browsers. It was tested on latest Safari, Firefox and Chrome.
+
+Development
+-----------
+
+To build and run the app yourself you will need node and npm installed on your machine. Then run:
+
+   $ npm install
+
+You'll need to provide the build with the appropriate API endpoint via the MONZO_API_ROOT environment variable. Then
+run the "build" script:
+
+   $ MONZO_API_ROOT=http://example.com npm run build
+
+This will output the compiled site into the "dist" directory. A static server is provided by running:
+
+   $ npm start
+
+Then navigate to http://localhost:8080 in your browser. To re-build anytime a change occurs in a file use
+the "watch" command:
+
+   $ npm run watch
+
+Code Overview
+-------------
+
+The bulk of the JavaScript code is contained within the "src" directory. The third party libraries like "preact" are
+symlinked into "vendor" from "node_modules" to simplify the import paths. The entire app is served by the index.html
+file which contains nothing more than links to the scripts and stylesheets plus the Monzo API endpoint contained
+within the data-api-root attribute on the <body> tag.
+
+Everything within the "src" directory has a JSX extension, mostly just to keep the build simple.
+
+    src/
+      components/   Directory containing all of the Preact components. The most interesting one here is the
+                    AppContainer which holds the application state and deals with interfacing with the API.
+      actions.jsx   Helpers for updating the app state. Takes data in and returns a value suitable for passing to
+                    Preact's setState method. Kinda like a Redux action, kinda.
+      client.jsx    The API client, uses fetch() to talk to the back end and handles JSON parsing and Auth. Uses an
+                    HTTPError object to help with managing API errors.
+      main.jsx      The bootstrap script that initializes the app, included in index.html
+      store.jsx     Holds initial state for the application...
+      utils.jsx     Dumping ground for helper functions...
+
+The build is handled by Make[1], it mostly just deals with transforming the JSX files and putting them in /dist as well
+as copying over the index.html and vendor scripts. If the project were to get larger then using a dedicated build
+tool like Rollup[2] or Webpack[3] would be needed.
+
+[1]: https://www.gnu.org/software/make/
+[2]: http://rollupjs.org
+[3]: https://webpack.js.org
+
+Dependencies
+------------
+
+The app is designed to run on the LTS version of Node and npm which were v8.11.4 and 5.6.0 at last update.
+
+Preact[1] is used for client-side rendering, mostly to explore a lighter alternative to React. The JSX transform
+is handled by Babel[2] and the Bulma[3] CSS framework handles the styles.
+
+[1]: https://preactjs.com
+[2]: https://babeljs.io
+[3]: https://bulma.io/
+
+Areas of Improvement
+--------------------
+
+This implements only a subset of features requested in the original spec. Some notable things to improve:
+
+1) Use a proper build tool and more Babel plugins to enable richer JS features like enhanced class properties and
+   the spread operator. Also provide a ES5 version and polyfill missing API's for older browsers.
+2) Implement a lightweight server to handle session management. Storing the auth token in the browsers localstorage
+   is less than ideal. A server would also afford sending HTML down to the client with the initial request.
+3) Display a list of users for each of the apps with pagination.
+4) Better loading/error states for views.
+
+License
+-------
+
+Available under the MIT license. See LICENSE file for details.

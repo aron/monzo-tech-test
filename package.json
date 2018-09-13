@@ -1,0 +1,23 @@
+{
+  "name": "monzo-tech-test",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "static dist -H '{\"Cache-Control\": \"no-cache, must-revalidate\"}'",
+    "build": "make build",
+    "clean": "make clean",
+    "watch": "watch 'make build' . --ignoreDirectoryPattern=/^dist/"
+  },
+  "author": "Aron Carroll <code@aroncarroll.com> (http://aroncarroll.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "preact": "^8.3.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.1",
+    "node-static": "^0.7.10",
+    "watch": "^1.0.2"
+  }
+}
